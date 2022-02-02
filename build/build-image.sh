@@ -43,11 +43,11 @@ else
   BRANCH="master"
 fi
 
-if [[ $4 != "" ]] ; then
-  USER=$4
-else
-  USER="pi"
-fi
+#if [[ $4 != "" ]] ; then
+#  USER=$4
+#else
+#  USER="pi"
+#fi
 
 BUILD="GEM_"$(date +"%Y%m%d-%H%M%S")
 GITHUBPROJECT="Circuit-Gem"
@@ -132,9 +132,16 @@ fi
 # Copy img to new + name
 execute "cp $IMG $OUTFILE"
 
+
+# Get Loop partitions
+LOOP_DEV=$(sudo partx -a -v $OUTFILE | grep added | cut -f 1 -d ':')
+LOOP_DEV=$(echo $LOOP_DEV | cut -f 1 -d ' ')
+
+echo "LOOP_DEV=$LOOP_DEV"
+
 # Mount
-execute "mount -o loop,offset=4194304 $OUTFILE $MOUNTFAT32"
-execute "mount -o loop,offset=63963136 $OUTFILE $MOUNTEXT4"
+execute "mount ${LOOP_DEV}p1 $MOUNTFAT32"
+execute "mount ${LOOP_DEV}p2 $MOUNTEXT4"
 
 # Install
 execute "../install.sh YES $BRANCH $MOUNTFAT32 $MOUNTEXT4"
@@ -142,6 +149,9 @@ execute "../install.sh YES $BRANCH $MOUNTFAT32 $MOUNTEXT4"
 # Unmount
 execute "umount $MOUNTFAT32"
 execute "umount $MOUNTEXT4"
+
+# Delete partitions
+execute "sudo partx -d -v $LOOP_DEV"
 
 # DONE
 echo "SUCCESS: Image [$OUTFILE] has been built!"
