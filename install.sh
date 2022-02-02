@@ -46,7 +46,7 @@ else
 fi
 
 GITHUBPROJECT="Circuit-Gem"
-GITHUBURL="https://github.com/kiteretro/$GITHUBPROJECT"
+GITHUBURL="https://github.com/hoony9845/$GITHUBPROJECT"
 PIHOMEDIR="$DEST/home/pi"
 BINDIR="$PIHOMEDIR/$GITHUBPROJECT"
 #USER="$USER"
