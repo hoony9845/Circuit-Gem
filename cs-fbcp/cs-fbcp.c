@@ -43,8 +43,8 @@
 #define HEIGHT    216
 #define REAL_HEIGHT 240
 #define RESET_PIN 25
-#define DC_PIN    27
-#define LED_PIN   13
+#define DC_PIN    24
+//#define LED_PIN   13
 #define BITRATE   96000000 // 96 MHz = OK
 #define SPI_MODE  SPI_MODE_0
 #define FPS       60
@@ -96,7 +96,8 @@ static volatile unsigned
   *gpioSet,     // Write bitmask of GPIO pins to set here
   *gpioClr;     // Write bitmask of GPIO pins to clear here
 
-uint32_t resetMask, dcMask, ledMask; // GPIO pin bitmasks
+//uint32_t resetMask, dcMask, ledMask; // GPIO pin bitmasks
+uint32_t resetMask, dcMask; // GPIO pin bitmasks
 int      fdSPI0;            // /dev/spidev0.0 file descriptor
 
 static struct spi_ioc_transfer
@@ -262,7 +263,7 @@ int main(int argc, char *argv[]) {
   gpioClr   = &gpio[10];
   resetMask = 1 << RESET_PIN;
   dcMask    = 1 << DC_PIN;
-  ledMask    = 1 << LED_PIN;
+  //ledMask    = 1 << LED_PIN;
 
   if((fdSPI0 = open("/dev/spidev0.0", O_WRONLY | O_NONBLOCK)) < 0) {
     return err(5, "Can't open /dev/spidev0.0 (try 'sudo')\n");
@@ -274,13 +275,13 @@ int main(int argc, char *argv[]) {
   // Set 3 pins as outputs.  Must use INP before OUT.
   INP_GPIO(RESET_PIN); OUT_GPIO(RESET_PIN);
   INP_GPIO(DC_PIN)   ; OUT_GPIO(DC_PIN);
-  INP_GPIO(LED_PIN); OUT_GPIO(LED_PIN);
+  //INP_GPIO(LED_PIN); OUT_GPIO(LED_PIN);
 
   *gpioSet = resetMask; usleep(50); // Reset high,
   *gpioClr = resetMask; usleep(150000); // low,
   *gpioSet = resetMask; usleep(50); // high
   
-  *gpioSet = ledMask; usleep(50); // LED high
+  //*gpioSet = ledMask; usleep(50); // LED high
   
   // Initialize display
   writeCommand(ST77XX_SWRESET);
