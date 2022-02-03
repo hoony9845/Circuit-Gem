@@ -18,7 +18,8 @@ overscan_scale=1
 avoid_warnings=2
 
 # Enable safe shutdown
-dtoverlay=gpio-poweroff,gpiopin=17,active_low="y"
+dtoverlay=gpio-poweroff,gpiopin=14,active_low=1
+dtoverlay=gpio-shutdown,gpio_pin=7,active_low=1
 
 # SD overclock (ONLY IF SD SUPPORTS IT)
 #dtoverlay=sdtweak,overclock_50=100

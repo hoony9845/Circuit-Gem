@@ -137,7 +137,7 @@ execute "cp $BINDIR/settings/autostart.sh $DEST/opt/retropie/configs/all/autosta
 execute "chown $USER:$USER $DEST/opt/retropie/configs/all/autostart.sh"
 
 # Copy ES safe shutdown script
-execute "cp $BINDIR/settings/cs_shutdown.sh $DEST/opt/cs_shutdown.sh"
+#execute "cp $BINDIR/settings/cs_shutdown.sh $DEST/opt/cs_shutdown.sh"
 
 # Install the pixel theme
 if ! exists "$DEST/etc/emulationstation/themes/pixel/system/theme.xml" ; then
@@ -155,6 +155,9 @@ fi
 
 # Copy a default es_settings.cfg file
 execute "cp -p $BINDIR/settings/es_settings.cfg $DEST/opt/retropie/configs/all/emulationstation/es_settings.cfg"
+
+# Copy a default retrogame.cfg file
+execute "cp -p $BINDIR/settings/retrogame.cfg $DEST/boot/retrogame.cfg"
 
 # Enable 30sec autosave
 execute "sed -i \"s/# autosave_interval =/autosave_interval = \"30\"/\" $DEST/opt/retropie/configs/all/retroarch.cfg"
@@ -177,9 +180,9 @@ if [[ $(grep '/ramdisk' $DEST/etc/fstab) == "" ]] ; then
 fi
 
 # Prepare for service install
-execute "rm -f $DEST/etc/systemd/system/cs-hud.service"
-execute "rm -f $DEST/etc/systemd/system/multi-user.target.wants/cs-hud.service"
-execute "rm -f $DEST/lib/systemd/system/cs-hud.service"
+#execute "rm -f $DEST/etc/systemd/system/cs-hud.service"
+#execute "rm -f $DEST/etc/systemd/system/multi-user.target.wants/cs-hud.service"
+#execute "rm -f $DEST/lib/systemd/system/cs-hud.service"
 
 execute "rm -f $DEST/etc/systemd/system/cs-fbcp.service"
 execute "rm -f $DEST/etc/systemd/system/multi-user.target.wants/cs-fbcp.service"
@@ -190,10 +193,10 @@ execute "rm -f $DEST/etc/systemd/system/sysinit.target.wants/cs-splash.service"
 execute "rm -f $DEST/lib/systemd/system/cs-splash.service"
 
 # Install HUD service
-execute "cp $BINDIR/cs-hud/cs-hud.service $DEST/lib/systemd/system/cs-hud.service"
+#execute "cp $BINDIR/cs-hud/cs-hud.service $DEST/lib/systemd/system/cs-hud.service"
 
-execute "ln -s /lib/systemd/system/cs-hud.service $DEST/etc/systemd/system/cs-hud.service"
-execute "ln -s /lib/systemd/system/cs-hud.service $DEST/etc/systemd/system/multi-user.target.wants/cs-hud.service"
+#execute "ln -s /lib/systemd/system/cs-hud.service $DEST/etc/systemd/system/cs-hud.service"
+#execute "ln -s /lib/systemd/system/cs-hud.service $DEST/etc/systemd/system/multi-user.target.wants/cs-hud.service"
 
 # Install FBCP service
 execute "cp $BINDIR/cs-fbcp/cs-fbcp.service $DEST/lib/systemd/system/cs-fbcp.service"
@@ -210,7 +213,7 @@ execute "ln -s /lib/systemd/system/cs-splash.service $DEST/etc/systemd/system/sy
 # Enable if ran locally
 if [[ $DEST == "" ]] ; then
   execute "systemctl daemon-reload"
-  execute "systemctl restart cs-hud.service"
+#  execute "systemctl restart cs-hud.service"
   execute "systemctl restart cs-fbcp.service"
   execute "systemctl enable cs-splash.service"
 fi
