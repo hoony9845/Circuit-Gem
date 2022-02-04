@@ -159,6 +159,11 @@ execute "cp -p $BINDIR/settings/es_settings.cfg $DEST/opt/retropie/configs/all/e
 # Copy a default retrogame.cfg file
 execute "cp -p $BINDIR/settings/retrogame.cfg $DEST/boot/retrogame.cfg"
 
+# Copy a default 10-retrogame.rules file
+if ! exists "$DEST/etc/udev/rules.d/10-retrogame.rules" ; then
+execute "cp -p $BINDIR/settings/10-retrogame.rules $DEST/etc/udev/rules.d/10-retrogame.rules"
+fi
+
 # Enable 30sec autosave
 execute "sed -i \"s/# autosave_interval =/autosave_interval = \"30\"/\" $DEST/opt/retropie/configs/all/retroarch.cfg"
 
