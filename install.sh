@@ -157,12 +157,10 @@ fi
 execute "cp -p $BINDIR/settings/es_settings.cfg $DEST/opt/retropie/configs/all/emulationstation/es_settings.cfg"
 
 # Copy a default retrogame.cfg file
-execute "cp -p $BINDIR/settings/retrogame.cfg $DEST/boot/retrogame.cfg"
+execute "cp -p $BINDIR/settings/retrogame.cfg $DESTBOOT/retrogame.cfg"
 
 # Copy a default 10-retrogame.rules file
-if ! exists "$DEST/etc/udev/rules.d/10-retrogame.rules" ; then
-execute "cp -p $BINDIR/settings/10-retrogame.rules $DEST/etc/udev/rules.d/10-retrogame.rules"
-fi
+echo "SUBSYSTEM==\"input\", ATTRS{name}==\"retrogame\", ENV{ID_INPUT_KEYBOARD}=\"1\"" > $DEST/etc/udev/rules.d/10-retrogame.rules
 
 # Enable 30sec autosave
 execute "sed -i \"s/# autosave_interval =/autosave_interval = \"30\"/\" $DEST/opt/retropie/configs/all/retroarch.cfg"
@@ -214,6 +212,10 @@ execute "cp $BINDIR/cs-splash/cs-splash.service $DEST/lib/systemd/system/cs-spla
 
 execute "ln -s /lib/systemd/system/cs-splash.service $DEST/etc/systemd/system/cs-splash.service"
 execute "ln -s /lib/systemd/system/cs-splash.service $DEST/etc/systemd/system/sysinit.target.wants/cs-splash.service"
+
+# Install retrogame
+execute "cp $BINDIR/extras/retrogame $DEST/usr/local/bin/retrogame"
+execute "sed -i 's/^exit 0/\/usr\/local\/bin\/retrogame \&\\nexit 0/g' $DEST/etc/rc.local >/dev/null"
 
 # Enable if ran locally
 if [[ $DEST == "" ]] ; then
